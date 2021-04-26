@@ -4,31 +4,43 @@
  * and open the template in the editor.
  */
 package finalproject;
+import static finalproject.AddStudent.stmt;
+import static finalproject.DelStudent.stmt;
 import java.awt.Component;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.*;
 import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author milap
  */
+
 public class ListOutput extends javax.swing.JFrame {
-javax.swing.JFrame menu;
+    javax.swing.JFrame menu;
+    private String csv_sep = ";";
     public static Statement stmt;
     public static Connection connection;
-    private static ResultSet rs;
-    String urlDB, login, password;
-    /**
-     * Creates new form ListOutput
-     */
-    public ListOutput(String url, String l, String p) {
+    private ResultSet rs;
+    File exportfile;
+    DefaultTableModel model;
+    
+    public ListOutput() {
         initComponents();
-        urlDB = url;
-        login = l;
-        password = p;
+        model = (DefaultTableModel) jTable2.getModel();
     }
 
     /**
@@ -40,11 +52,18 @@ javax.swing.JFrame menu;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jButtonBack = new javax.swing.JButton();
+        jButtonTxtExport = new javax.swing.JButton();
+
+        fileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        fileChooser.setFileFilter(new MyCustomFilter());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("StudentsDB");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Список студентов", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -53,11 +72,11 @@ javax.swing.JFrame menu;
 
             },
             new String [] {
-                "Id студента", "Фамилия", "Имя", "Номер телефона", "Город", "Id университета"
+                "Id студента", "Фамилия", "Имя", "Номер телефона", "Город", "Университет"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false
@@ -72,10 +91,10 @@ javax.swing.JFrame menu;
             }
         });
         jTable2.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jTable2AncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -95,9 +114,23 @@ javax.swing.JFrame menu;
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jButtonBack.setLabel("Назад");
+        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBackActionPerformed(evt);
+            }
+        });
+
+        jButtonTxtExport.setText("Экспортировать в csv");
+        jButtonTxtExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTxtExportActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,14 +138,25 @@ javax.swing.JFrame menu;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonBack, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonTxtExport)
+                        .addGap(18, 18, 18))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonBack)
+                    .addComponent(jButtonTxtExport))
                 .addContainerGap())
         );
 
@@ -121,20 +165,20 @@ javax.swing.JFrame menu;
 
     private void jTable2AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTable2AncestorAdded
         try {
-            connection = DriverManager.getConnection(urlDB, login, password);
-        String strSelect = "SELECT * FROM tasks.students;";
+            ConnectionDB db_conn = ConnectionDB.getConnectionDB();
+            stmt = db_conn.connection.createStatement();
+//            connection = DriverManager.getConnection(ConnectionDB.url, ConnectionDB.login, ConnectionDB.pass);
+        String strSelect = "SELECT * FROM " + ConnectionDB.db_name + ".Students;";
         rs = stmt.executeQuery(strSelect);
         
         while (rs.next()) {
                 int id = rs.getInt("STUDENT_ID");
                 String lname = rs.getString("SURNAME");
-                String name = rs.getString("SURNAME");
+                String name = rs.getString("NAME_");
                 String pnumber = rs.getString("PHONE_NUMBER");
                 String city = rs.getString("CITY");
-                int univ = rs.getInt("UNIV_ID");
-                DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-                model.addRow(new Object[]{id, lname, name, pnumber, city, univ});
-                
+                String univ = rs.getString("UNIV");
+                model.addRow(new Object[]{id, lname, name, pnumber, city, univ}); 
             }
         
         }catch (SQLException sqlEx) {
@@ -142,42 +186,96 @@ javax.swing.JFrame menu;
         }
     }//GEN-LAST:event_jTable2AncestorAdded
 
+    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+        menu = new MenuJFrame();
+        menu.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonBackActionPerformed
+
+    private void jButtonTxtExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTxtExportActionPerformed
+        fileChooser.setDialogTitle("Specify a file to save");
+        int userSelection = fileChooser.showSaveDialog(this);
+        JOptionPane msg = new JOptionPane();
+        
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String filename = fileToSave.getAbsolutePath();
+            if (fileChooser.getFileFilter().getDescription().equals("Text documents (*.csv)") && !filename.endsWith(".csv"))
+                filename += ".csv";
+            System.out.println("Save as file: " + filename);
+//             msg.showMessageDialog(this,
+//                filename + "  " + fileChooser.getFileFilter().getDescription(),
+//                "Success",
+//                JOptionPane.INFORMATION_MESSAGE);
+            Writer fwriter = null;
+            //BufferedWriter out = null;
+            try {
+                fwriter = new OutputStreamWriter(new FileOutputStream(filename), "Cp1251");//StandardCharsets.ISO_8859_1);
+                //FileWriter fwriter = new FileWriter(filename);
+                for(int i = 0; i < model.getRowCount(); i++) {
+                    for(int j = 0; j < model.getColumnCount(); j++) {
+                       fwriter.write(model.getValueAt(i, j).toString());
+                       if(j < model.getColumnCount() - 1)
+                          fwriter.append(csv_sep);
+                    }
+                fwriter.append('\n');
+                }
+                fwriter.close();
+                msg.showMessageDialog(this,
+                "Данные успешно экспортированы в файл " + filename,
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            }
+            catch(Exception e)
+           {
+             //e.printStackTrace();
+            msg.showMessageDialog(this,
+             e.getMessage(),
+             "Error",
+             JOptionPane.ERROR_MESSAGE);
+           }
+        }
+    }//GEN-LAST:event_jButtonTxtExportActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-       /*s java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ListOutput().setVisible(true);
-            }
-        });*/
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(ListOutput.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//       /*s java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ListOutput().setVisible(true);
+//            }
+//        });*/
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JButton jButtonBack;
+    private javax.swing.JButton jButtonTxtExport;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;

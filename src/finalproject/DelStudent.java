@@ -1,3 +1,5 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,6 +7,7 @@
  */
 package finalproject;
 
+import static finalproject.AddStudent.stmt;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,17 +22,12 @@ public class DelStudent extends javax.swing.JFrame {
     javax.swing.JFrame menu;
     public static Statement stmt;
     public static Connection connection;
-    String urlDB, login, password;
+    ConnectionDB conn;
     /**
      * Creates new form MenuJFrame
      */
-    public DelStudent(String url, String l, String p) {
+    public DelStudent() {
         initComponents();
-        //menu = mainmenu;
-        urlDB = url;
-        login = l;
-        password = p;
-        //connection = conn;
     }
 
     /**
@@ -106,7 +104,7 @@ public class DelStudent extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jToggleButton1)
                     .addComponent(jToggleButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
@@ -115,7 +113,7 @@ public class DelStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
-        menu = new MenuJFrame(urlDB, login, password);
+        menu = new MenuJFrame();
         menu.setVisible(true);
         //menu.show();
         dispose();
@@ -127,15 +125,20 @@ public class DelStudent extends javax.swing.JFrame {
 
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         String UserID = jTextField2.getText();
+        
         try {
-            Connection conn = DriverManager.getConnection(urlDB, login, password);
-            stmt = conn.createStatement();
-            ResultSet set = stmt.executeQuery("SELECT COUNT(STUDENT_ID)FROM first.student WHERE STUDENT_ID = " + UserID + ";");
-            if(set != null){
-                String SQL = "DELETE FROM first.student WHERE STUDENT_ID =" + UserID + ";";
-                stmt.executeUpdate(SQL);
-                jTextPane1.setText("Запись удалена");
-            }else  jTextPane1.setText("Запись не найдена");
+            ConnectionDB db_conn = ConnectionDB.getConnectionDB();
+            stmt = db_conn.connection.createStatement();
+            String id_record = "";
+            String checkSQL = "SELECT * FROM " + ConnectionDB.db_name + ".Students WHERE STUDENT_ID = " + UserID + ";";
+            if (!stmt.executeQuery(checkSQL).next()) {
+                jTextPane1.setText("Записи с id " + UserID + " не существует");
+            } else {
+                id_record = stmt.getResultSet().getString("SURNAME");
+                String SQL = "DELETE FROM " + ConnectionDB.db_name + ".Students WHERE STUDENT_ID =" + UserID + ";";
+            //stmt.executeUpdate(SQL);
+            jTextPane1.setText("Запись студента " + UserID + " " + id_record + " удалена");
+            }
                        
             }catch (SQLException sqlEx) {
         } 

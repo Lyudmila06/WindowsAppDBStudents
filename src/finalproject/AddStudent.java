@@ -18,17 +18,12 @@ public class AddStudent extends javax.swing.JFrame {
     javax.swing.JFrame menu;
     public static Statement stmt;
     public static Connection connection;
-    String urlDB, login, password;
+    //String urlDB, login, password;
     /**
      * Creates new form MenuJFrame
      */
-    public AddStudent(String url, String l, String p) {
+    public AddStudent() {
         initComponents();
-        //menu = mainmenu;
-        urlDB = url;
-        login = l;
-        password = p;
-        //connection = conn;
     }
 
     /**
@@ -47,7 +42,6 @@ public class AddStudent extends javax.swing.JFrame {
         jTextField_idst = new javax.swing.JTextField();
         jTextField_lname = new javax.swing.JTextField();
         jTextField_name = new javax.swing.JTextField();
-        jTextField_pnumber = new javax.swing.JTextField();
         jTextField_city = new javax.swing.JTextField();
         jTextField_iduniv = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -56,6 +50,7 @@ public class AddStudent extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jTextField_pnumber = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jToggleButtonOK = new javax.swing.JToggleButton();
         jToggleButtonCancel = new javax.swing.JToggleButton();
@@ -65,6 +60,7 @@ public class AddStudent extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("StudentsDB");
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Добавление нового студента", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -87,9 +83,6 @@ public class AddStudent extends javax.swing.JFrame {
             }
         });
 
-        jTextField_pnumber.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField_pnumber.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-
         jTextField_city.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTextField_city.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
@@ -111,7 +104,18 @@ public class AddStudent extends javax.swing.JFrame {
 
         jLabel5.setText("Введите город");
 
-        jLabel6.setText("Введите ID университета");
+        jLabel6.setText("Введите наименование университета");
+
+        try {
+            jTextField_pnumber.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("+7(###)###-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jTextField_pnumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_pnumberActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -122,18 +126,18 @@ public class AddStudent extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField_idst, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextField_lname, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextField_name, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField_pnumber, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextField_city, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField_iduniv, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                    .addComponent(jTextField_iduniv, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextField_pnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -141,9 +145,6 @@ public class AddStudent extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField_idst, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -153,32 +154,35 @@ public class AddStudent extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField_name, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField_pnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField_city, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField_iduniv, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField_pnumber, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_city, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField_iduniv, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel5, jLabel6});
 
-        jToggleButtonOK.setText("OK");
+        jToggleButtonOK.setText("Добавить");
         jToggleButtonOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonOKActionPerformed(evt);
             }
         });
 
-        jToggleButtonCancel.setText("Cancel");
+        jToggleButtonCancel.setText("Назад");
         jToggleButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonCancelActionPerformed(evt);
@@ -190,11 +194,11 @@ public class AddStudent extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
+                .addGap(118, 118, 118)
                 .addComponent(jToggleButtonOK, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addGap(42, 42, 42)
                 .addComponent(jToggleButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,7 +232,7 @@ public class AddStudent extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2))
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,8 +251,8 @@ public class AddStudent extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 18, Short.MAX_VALUE)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,11 +265,13 @@ public class AddStudent extends javax.swing.JFrame {
     private void jToggleButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonOKActionPerformed
         StudentData student = new StudentData(jTextField_idst.getText(), jTextField_lname.getText(), jTextField_name.getText(),
                 jTextField_pnumber.getText(), jTextField_city.getText(), jTextField_iduniv.getText());
-        if (student.msg != null){
+        if (student.msg.isEmpty()){
             try {
-            connection = DriverManager.getConnection(urlDB, login, password);
+            ConnectionDB db_conn = ConnectionDB.getConnectionDB();
+            stmt = db_conn.connection.createStatement();
+//            connection = DriverManager.getConnection(ConnectionDB.url, ConnectionDB.login, ConnectionDB.pass);
             stmt = connection.createStatement();
-            String strSubj = "INSERT INTO tasks.students (STUDENT_ID, SURNAME, NAME_, PHONE_NUMBER, CITY, UNIV_ID) \n" + //ИМЯ БД И ТАБЛИЦЫ
+            String strSubj = "INSERT INTO " + ConnectionDB.db_name + ".Students (STUDENT_ID, SURNAME, NAME_, PHONE_NUMBER, CITY, UNIV) \n" + //ИМЯ БД И ТАБЛИЦЫ
            " VALUES (" + student.id + ", '" + student.lastname + "', '" + student.name + "', '" + 
                     student.number + "', '" + student.city + "', '" + student.university + "');";
         stmt.executeUpdate(strSubj);
@@ -290,15 +296,18 @@ public class AddStudent extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField_idunivActionPerformed
 
     private void jToggleButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCancelActionPerformed
-        menu = new MenuJFrame(urlDB, login, password);
+        menu = new MenuJFrame();
         menu.setVisible(true);
-        //menu.show();
         dispose();
     }//GEN-LAST:event_jToggleButtonCancelActionPerformed
 
     private void jTextField_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_nameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField_nameActionPerformed
+
+    private void jTextField_pnumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_pnumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField_pnumberActionPerformed
 
     /**
      * @param args the command line arguments
@@ -353,7 +362,7 @@ public class AddStudent extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_iduniv;
     private javax.swing.JTextField jTextField_lname;
     private javax.swing.JTextField jTextField_name;
-    private javax.swing.JTextField jTextField_pnumber;
+    private javax.swing.JFormattedTextField jTextField_pnumber;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane jTextPaneErrors;
     private javax.swing.JToggleButton jToggleButtonCancel;

@@ -4,23 +4,24 @@
  * and open the template in the editor.
  */
 package finalproject;
+import static finalproject.AddStudent.connection;
+import static finalproject.AddStudent.stmt;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author milap
  */
 public class MenuJFrame extends javax.swing.JFrame {
-    public static Connection connection;
-    String urlDB, login, password;
-    /**
-     * Creates new form MenuJFrame
-     */
-    public MenuJFrame(String url, String l, String p) {//Connection conn) {
+
+    ConnectionDB db_conn;
+
+    public MenuJFrame() {
         initComponents();
-        urlDB = url;
-        login = l;
-        password = p;
-       // connection = conn;
+        jTextArea1.setBorder(null);
     }
 
 
@@ -33,82 +34,136 @@ public class MenuJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jInternalFrame1 = new javax.swing.JInternalFrame();
-        jFrame1 = new javax.swing.JFrame();
-        jFrame2 = new javax.swing.JFrame();
-        jFrame3 = new javax.swing.JFrame();
         jButton3 = new javax.swing.JButton();
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jFileChooser3 = new javax.swing.JFileChooser();
-        jDialog1 = new javax.swing.JDialog();
+        jDialogCreateDB = new javax.swing.JDialog();
+        label1 = new java.awt.Label();
+        button1 = new java.awt.Button();
+        button2 = new java.awt.Button();
+        label2 = new java.awt.Label();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPanelErrors = new javax.swing.JTextPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButtonAdd = new javax.swing.JButton();
         jButtonDel = new javax.swing.JButton();
         jButtonListOut = new javax.swing.JButton();
-
-        jInternalFrame1.setVisible(true);
-
-        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jFrame2Layout = new javax.swing.GroupLayout(jFrame2.getContentPane());
-        jFrame2.getContentPane().setLayout(jFrame2Layout);
-        jFrame2Layout.setHorizontalGroup(
-            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jFrame2Layout.setVerticalGroup(
-            jFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jFrame3Layout = new javax.swing.GroupLayout(jFrame3.getContentPane());
-        jFrame3.getContentPane().setLayout(jFrame3Layout);
-        jFrame3Layout.setHorizontalGroup(
-            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jFrame3Layout.setVerticalGroup(
-            jFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jButtonAddFromTxt = new javax.swing.JButton();
+        jButtonAdd2 = new javax.swing.JButton();
+        jButtonExit = new javax.swing.JButton();
 
         jButton3.setText("jButton3");
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        jDialogCreateDB.setAlwaysOnTop(true);
+        jDialogCreateDB.setLocationByPlatform(true);
+        jDialogCreateDB.setMinimumSize(new java.awt.Dimension(490, 390));
+        jDialogCreateDB.setResizable(false);
+
+        label1.setText("Столбцы:");
+
+        button1.setLabel("OK");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
+        button2.setLabel("Отмена");
+        button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button2ActionPerformed(evt);
+            }
+        });
+
+        label2.setText("Создать базу данных Students?");
+
+        jTextPanelErrors.setEditable(false);
+        jTextPanelErrors.setBorder(null);
+        jTextPanelErrors.setForeground(new java.awt.Color(255, 255, 255));
+        jTextPanelErrors.setToolTipText("");
+        jTextPanelErrors.setCaretColor(new java.awt.Color(153, 153, 153));
+        jTextPanelErrors.setDisabledTextColor(new java.awt.Color(153, 0, 0));
+        jTextPanelErrors.setEnabled(false);
+        jTextPanelErrors.setFocusCycleRoot(false);
+        jTextPanelErrors.setFocusable(false);
+        jTextPanelErrors.setOpaque(false);
+        jTextPanelErrors.setRequestFocusEnabled(false);
+        jTextPanelErrors.setSelectionColor(new java.awt.Color(204, 204, 204));
+        jTextPanelErrors.setVerifyInputWhenFocusTarget(false);
+        jScrollPane1.setViewportView(jTextPanelErrors);
+
+        jScrollPane3.setBackground(javax.swing.UIManager.getDefaults().getColor("CheckBox.light"));
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(javax.swing.UIManager.getDefaults().getColor("CheckBox.background"));
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("ID студента (STUDENT_ID INT key NOT NULL)\nФамилия студента (SURNAME text)\nИмя студента (NAME_ text)\nНомер телефона (PHONE_NUMBER text)\nГород (CITY text)\nНаименование университета (UNIV text)");
+        jTextArea1.setBorder(null);
+        jTextArea1.setHighlighter(null);
+        jTextArea1.setMinimumSize(new java.awt.Dimension(280, 100));
+        jTextArea1.setPreferredSize(new java.awt.Dimension(280, 100));
+        jTextArea1.setRequestFocusEnabled(false);
+        jTextArea1.setVerifyInputWhenFocusTarget(false);
+        jScrollPane3.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jDialogCreateDBLayout = new javax.swing.GroupLayout(jDialogCreateDB.getContentPane());
+        jDialogCreateDB.getContentPane().setLayout(jDialogCreateDBLayout);
+        jDialogCreateDBLayout.setHorizontalGroup(
+            jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogCreateDBLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogCreateDBLayout.createSequentialGroup()
+                .addGroup(jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jDialogCreateDBLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane1))
+                    .addGroup(jDialogCreateDBLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDialogCreateDBLayout.createSequentialGroup()
+                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)))))
+                .addGap(25, 25, 25))
         );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jDialogCreateDBLayout.setVerticalGroup(
+            jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogCreateDBLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addGroup(jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialogCreateDBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(button1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addGap(22, 22, 22))
         );
+
+        label2.getAccessibleContext().setAccessibleName("Создать в базе данных таблицу Students?");
+
+        jToggleButton1.setText("jToggleButton1");
+
+        jScrollPane2.setViewportView(jTextPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("StudentsDB");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Доступные действя", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Доступные действия", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jButtonAdd.setText("Добавить студента");
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -131,32 +186,61 @@ public class MenuJFrame extends javax.swing.JFrame {
             }
         });
 
+        jButtonAddFromTxt.setText("Добавить из csv");
+        jButtonAddFromTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddFromTxtActionPerformed(evt);
+            }
+        });
+
+        jButtonAdd2.setText("Создать БД \"Студенты\"");
+        jButtonAdd2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdd2ActionPerformed(evt);
+            }
+        });
+
+        jButtonExit.setText("Выход");
+        jButtonExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExitActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(84, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(89, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonDel, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(jButtonAdd)
-                            .addGap(86, 86, 86))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jButtonListOut, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap()))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonDel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonListOut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAddFromTxt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAdd2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(91, 91, 91))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButtonExit)
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addComponent(jButtonExit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(jButtonAdd2)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonAdd)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonAddFromTxt)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonDel)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonListOut)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -170,10 +254,10 @@ public class MenuJFrame extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -187,36 +271,70 @@ public class MenuJFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        
-        javax.swing.JFrame newSt = new AddStudent(urlDB, login, password);
-        //newSt.setConn(connection);
-        newSt.setVisible(true);
+    private void jButtonAddFromTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddFromTxtActionPerformed
+        javax.swing.JFrame addfromtxt = new AddFromCsv();
+        addfromtxt.setVisible(true);
         this.setVisible(false);
-       
-        
-    }//GEN-LAST:event_jButtonAddActionPerformed
+    }//GEN-LAST:event_jButtonAddFromTxtActionPerformed
 
     private void jButtonListOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListOutActionPerformed
-        javax.swing.JFrame listOut = new ListOutput(urlDB, login, password);
+        javax.swing.JFrame listOut = new ListOutput();
         listOut.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButtonListOutActionPerformed
 
     private void jButtonDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDelActionPerformed
-        javax.swing.JFrame delSt = new DelStudent(urlDB, login, password);
+        javax.swing.JFrame delSt = new DelStudent();
         //newSt.setConn(connection);
         delSt.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButtonDelActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+
+        javax.swing.JFrame newSt = new AddStudent();
+        newSt.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdd2ActionPerformed
+        this.jDialogCreateDB.setVisible(true);
+    }//GEN-LAST:event_jButtonAdd2ActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        try {
+            db_conn = ConnectionDB.getConnectionDB();
+            stmt = db_conn.connection.createStatement();
+            String strSubj = "CREATE TABLE " + ConnectionDB.db_name + ".Students (STUDENT_ID INT key NOT NULL, SURNAME text, NAME_ text, PHONE_NUMBER text, CITY text, UNIV text)";
+            stmt.executeUpdate(strSubj);
+            jTextPanelErrors.setText("Таблица Students успешно создана");
+            
+            }catch (SQLException sqlEx) {
+            jTextPanelErrors.setText(sqlEx.getMessage());
+        }
+    }//GEN-LAST:event_button1ActionPerformed
+
+    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
+        this.jDialogCreateDB.setVisible(false);
+    }//GEN-LAST:event_button2ActionPerformed
+
+    private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExitActionPerformed
+        javax.swing.JFrame connecttodb = new ConnectToDB();
+        connecttodb.setVisible(true);
+        this.setVisible(false);
+        try {
+            db_conn.connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,18 +373,26 @@ public class MenuJFrame extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Button button1;
+    private java.awt.Button button2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonAdd2;
+    private javax.swing.JButton jButtonAddFromTxt;
     private javax.swing.JButton jButtonDel;
+    private javax.swing.JButton jButtonExit;
     private javax.swing.JButton jButtonListOut;
-    private javax.swing.JDialog jDialog1;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFileChooser jFileChooser3;
-    private javax.swing.JFrame jFrame1;
-    private javax.swing.JFrame jFrame2;
-    private javax.swing.JFrame jFrame3;
-    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JDialog jDialogCreateDB;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPanelErrors;
+    private javax.swing.JToggleButton jToggleButton1;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
     // End of variables declaration//GEN-END:variables
 }

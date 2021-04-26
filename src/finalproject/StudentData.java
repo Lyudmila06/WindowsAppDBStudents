@@ -8,7 +8,7 @@ package finalproject;
 
 public class StudentData {
     String id, lastname, name, number, city, university;
-    String msg = null;
+    String msg = "";
     StudentData(String s1, String s2, String s3, String s4, String s5, String s6){
         id = s1;
         lastname = s2;
@@ -17,25 +17,26 @@ public class StudentData {
         city = s5;
         university = s6;
         msg += checkId() + checkName() + checkLastname() + checkNumber() + checkCity() + checkUniversity();
-        //checkNumber(); //формат корректного номера +7(994)016-44-26
         
     };
     
     
     public String checkId() {
-        String s = null;
+        String s = "";
         if (!id.matches("[0-9]{1,3}")) {
-            s = "Incorrect ID!\n";
+            s = "ID студента введен некорректно!\n";
+            //Incorrect student ID
         }
         return s;
     }
     
     //проверяем фамилию
     public String checkLastname(){
-        String s = null;
+        String s = "";
         boolean correct = true;
         if (!lastname.matches("^([А-ЯЁ][а-яё]{1,19})$")) {
-            s = "Incorrect surname!\n";
+            s = "Фамилия студента введена некорректно!\n";
+            //Incorrect student surname!
             correct = false;
         }
         return s;
@@ -44,9 +45,10 @@ public class StudentData {
     //проверяем имя
     public String checkName(){
         boolean correct = true;
-        String s = null;
+        String s = "";
         if (!name.matches("^([А-ЯЁ][а-яё]{1,10})$")) {
-            s = "Incorrect name!\n";
+            s = "Имя студента введено некорректно!\n";
+            //Incorrect student name!
             correct = false;
         }
         return s;
@@ -56,9 +58,10 @@ public class StudentData {
     //проверяем номер телефона
     public String checkNumber(){
         boolean correct = true;
-        String s = null;
-        if (!number.matches("^[+]7[(][0-9]{3}[)][0-9]{3}-[0-9]{2}-[0-9]{2}$")) {
-            s = "Incorrect number phone!\n";
+        String s = "";
+        if (!number.matches("^[+]7[(][0-9]{3}[)][0-9]{3}[-][0-9]{2}[-][0-9]{2}$")) {
+            //s = "Incorrect number phone!\n Example of a correct number: +7(111)111-11-11";
+            s = "Номер телефона введен некорректно!\n Пример корректного номера телефона: +7(111)111-11-11\n";
             correct = false;
         }
         return s;
@@ -67,9 +70,10 @@ public class StudentData {
     //проверка города
     public String checkCity(){
         boolean correct = true;
-        String s = null;
+        String s = "";
         if (!city.matches("^[А-ЯЁ][а-яё]+([-][А-ЯЁ][а-яё]+)?$")) {
-            s = "Incorrect city!\n";
+            s = "Город введен некорректно!\n";
+            //Incorrect city!
             correct = false;
         }
         return s;
@@ -78,9 +82,10 @@ public class StudentData {
     //проверка университета
     public String checkUniversity(){
         boolean correct = true;
-        String s = null;
+        String s = "";
         if (!university.matches("^[А-ЯЁ]([А-ЯЁ]+|[а-яё]+)+$")) {
-            s = "Incorrect univercity!\n";
+            s = "Наименование университета введено некорректно!\n";
+            //Incorrect univercity!
             correct = false;
         }
         return s;
