@@ -16,19 +16,21 @@ import java.sql.SQLException;
 public class ConnectionDB {
             
     private static ConnectionDB db_conn;
-    private static String url, login, pass;
-    
+    public static String url, login, pass;
     public static String db_name;
     public static Connection connection;
     
-     public static ConnectionDB getConnectionDB() {
+     public static ConnectionDB getConnectionDB() 
+     {
         if (db_conn == null) {
             db_conn = new ConnectionDB();
         }
         return db_conn;
     }
     
-    public void setConnection(String u, String l, String p, String db) throws SQLException {
+    public void setConnection(String u, String l, String p, String db) 
+            throws SQLException 
+    {
         url = u;
         login = l;
         pass = p;

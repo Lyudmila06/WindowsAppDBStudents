@@ -95,7 +95,7 @@ public class ConnectToDB extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel3.setText("URL-адрес базы данных");
+        jLabel3.setText("URL-адрес соединения");
 
         jTextField_URL.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTextField_URL.setText("jdbc:mysql://localhost:3306/mysql?serverTimezone=GMT");
@@ -246,7 +246,8 @@ public class ConnectToDB extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) 
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

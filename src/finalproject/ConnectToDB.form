@@ -177,7 +177,7 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="URL-&#x430;&#x434;&#x440;&#x435;&#x441; &#x431;&#x430;&#x437;&#x44b; &#x434;&#x430;&#x43d;&#x43d;&#x44b;&#x445;"/>
+            <Property name="text" type="java.lang.String" value="URL-&#x430;&#x434;&#x440;&#x435;&#x441; &#x441;&#x43e;&#x435;&#x434;&#x438;&#x43d;&#x435;&#x43d;&#x438;&#x44f;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField_URL">

@@ -9,23 +9,24 @@ package finalproject;
 public class StudentData {
     String id, lastname, name, number, city, university;
     String msg = "";
-    StudentData(String s1, String s2, String s3, String s4, String s5, String s6){
+    
+    StudentData(String s1, String s2, String s3, String s4, String s5, String s6) {
         id = s1;
         lastname = s2;
         name = s3;
         number = s4;
         city = s5;
         university = s6;
-        msg += checkId() + checkName() + checkLastname() + checkNumber() + checkCity() + checkUniversity();
-        
+        msg += checkId() + checkName() + checkLastname() + checkNumber() + checkCity() + checkUniversity();     
     };
-    
-    
+        
     public String checkId() {
         String s = "";
+        
         if (!id.matches("[0-9]{1,3}")) {
             s = "ID студента введен некорректно!\n";
             //Incorrect student ID
+            
         }
         return s;
     }

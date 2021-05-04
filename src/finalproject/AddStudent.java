@@ -18,7 +18,6 @@ public class AddStudent extends javax.swing.JFrame {
     javax.swing.JFrame menu;
     public static Statement stmt;
     public static Connection connection;
-    //String urlDB, login, password;
     /**
      * Creates new form MenuJFrame
      */
@@ -228,11 +227,11 @@ public class AddStudent extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,8 +241,8 @@ public class AddStudent extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -263,14 +262,15 @@ public class AddStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 //Проверка и добавление записи
     private void jToggleButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonOKActionPerformed
-        StudentData student = new StudentData(jTextField_idst.getText(), jTextField_lname.getText(), jTextField_name.getText(),
-                jTextField_pnumber.getText(), jTextField_city.getText(), jTextField_iduniv.getText());
+        StudentData student = new StudentData(jTextField_idst.getText(),
+                jTextField_lname.getText(), jTextField_name.getText(),
+                jTextField_pnumber.getText(), jTextField_city.getText(), 
+                jTextField_iduniv.getText());
         if (student.msg.isEmpty()){
             try {
             ConnectionDB db_conn = ConnectionDB.getConnectionDB();
             stmt = db_conn.connection.createStatement();
-//            connection = DriverManager.getConnection(ConnectionDB.url, ConnectionDB.login, ConnectionDB.pass);
-            stmt = connection.createStatement();
+
             String strSubj = "INSERT INTO " + ConnectionDB.db_name + ".Students (STUDENT_ID, SURNAME, NAME_, PHONE_NUMBER, CITY, UNIV) \n" + //ИМЯ БД И ТАБЛИЦЫ
            " VALUES (" + student.id + ", '" + student.lastname + "', '" + student.name + "', '" + 
                     student.number + "', '" + student.city + "', '" + student.university + "');";

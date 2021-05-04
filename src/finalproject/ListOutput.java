@@ -167,7 +167,6 @@ public class ListOutput extends javax.swing.JFrame {
         try {
             ConnectionDB db_conn = ConnectionDB.getConnectionDB();
             stmt = db_conn.connection.createStatement();
-//            connection = DriverManager.getConnection(ConnectionDB.url, ConnectionDB.login, ConnectionDB.pass);
         String strSelect = "SELECT * FROM " + ConnectionDB.db_name + ".Students;";
         rs = stmt.executeQuery(strSelect);
         
@@ -180,7 +179,6 @@ public class ListOutput extends javax.swing.JFrame {
                 String univ = rs.getString("UNIV");
                 model.addRow(new Object[]{id, lname, name, pnumber, city, univ}); 
             }
-        
         }catch (SQLException sqlEx) {
             //jTextPaneErrors.setText(sqlEx.getMessage());
         }
